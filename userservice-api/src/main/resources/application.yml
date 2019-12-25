@@ -1,0 +1,18 @@
+server:
+  port: 8884
+  servlet:
+    context-path: /userservice
+logging:
+  config: classpath:log4j2.xml
+spring:
+  application:
+    name: userservice
+eureka:
+  instance:
+    # 使用服务的IP而不是服务器名称，确保在容器环境下正常
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
