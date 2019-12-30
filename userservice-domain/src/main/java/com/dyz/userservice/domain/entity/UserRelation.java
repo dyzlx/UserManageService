@@ -20,7 +20,7 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode(of = {"id", "initiator_id", "recipient_id"})
 @NoArgsConstructor
 @AllArgsConstructor
 

@@ -40,7 +40,7 @@ public class User {
     @Column(name = "phone_number", length = 50, nullable = false)
     private String phoneNumber;
 
-    @Column(name = "nickName", length = 100, nullable = false)
+    @Column(name = "nick_name", length = 100, nullable = false)
     private String nickName;
 
     @Column(name = "register_time", nullable = false)
