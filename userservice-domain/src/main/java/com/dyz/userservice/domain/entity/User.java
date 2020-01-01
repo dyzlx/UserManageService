@@ -55,9 +55,19 @@ public class User {
     @Column(name = "gender", length = 10, nullable = false)
     private String gender;
 
+    /**
+     * false : the user deleted his account
+     */
     @Column(name = "enable", nullable = false)
     @Type(type = "yes_no")
     private boolean enable;
+
+    /**
+     * false : the user is temporarily unable to access their accounts
+     */
+    @Column(name = "available", nullable = false)
+    @Type(type = "yes_no")
+    private boolean available;
 
     @Column(name = "role_id", nullable = false)
     private int roleId;
