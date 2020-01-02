@@ -2,6 +2,8 @@ package com.dyz.userservice.domain.repository;
 
 import com.dyz.userservice.common.constant.ServiceConstant;
 import com.dyz.userservice.domain.entity.User;
+import com.dyz.userservice.domain.entity.UserRelation;
+import com.dyz.userservice.domain.entity.UserRole;
 import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +22,12 @@ public class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserRelationRepository userRelationRepository;
+
+    @Autowired
+    private UserRoleRepository userRoleRepository;
+
     @Test
     public void addUserTest() {
         User user1 = User.builder()
@@ -32,7 +40,6 @@ public class UserRepositoryTest {
                 .password("123456")
                 .phoneNumber("15332093083")
                 .registerTime(new Date())
-                .roleId(1)
                 .build();
         User user2 = User.builder()
                 .birthday(new Date())
@@ -44,7 +51,6 @@ public class UserRepositoryTest {
                 .password("123456")
                 .phoneNumber("15010389831")
                 .registerTime(new Date())
-                .roleId(1)
                 .build();
         //userRepository.save(user1);
         //userRepository.save(user2);
@@ -54,7 +60,7 @@ public class UserRepositoryTest {
     public void queryUsersTest() throws ParseException {
         Date fromDate = DateUtils.parseDate("1996-03-13", ServiceConstant.DATE_FORMAT_SHORT);
         Date toDate = DateUtils.parseDate("9999-03-13", ServiceConstant.DATE_FORMAT_SHORT);
-        List<User> users = userRepository.queryUsers(null,null,null,null,fromDate,toDate);
+        List<User> users = userRepository.queryEnableUsers(null,null,null,null,fromDate,toDate);
         System.out.println(users);
     }
 
@@ -68,6 +74,18 @@ public class UserRepositoryTest {
     public void unableUserTest() {
         User user = userRepository.getUserById(1);
         user.setEnable(true);
-        userRepository.save(user);
+        //userRepository.save(user);
+    }
+
+    @Test
+    public void makefriendsTest() {
+        UserRelation userRelation = UserRelation.builder().initiatorId(1).recipientId(2).createTime(new Date()).build();
+        //userRelationRepository.save(userRelation);
+    }
+
+    @Test
+    public void giveUserARoleTest() {
+        UserRole userRole = UserRole.builder().userId(1).roleId(1).build();
+        //userRoleRepository.save(userRole);
     }
 }

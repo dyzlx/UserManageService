@@ -14,36 +14,34 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.Date;
 
 @Builder
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode(of = {"initiatorId", "recipientId"})
+@EqualsAndHashCode(of = {"userId", "roleId"})
 @NoArgsConstructor
 @AllArgsConstructor
 
 @Entity
-@Table(name = "user_relation")
-@IdClass(UserRelationKey.class)
-public class UserRelation {
+@Table(name = "user_role")
+@IdClass(value = UserRoleKey.class)
+public class UserRole {
 
     @Id
-    @Column(name = "initiator_id", nullable = false)
-    private int initiatorId;
+    @Column(name = "user_id", nullable = false)
+    private int userId;
 
     @Id
-    @Column(name = "recipient_id", nullable = false)
-    private int recipientId;
+    @Column(name = "role_id", nullable = false)
+    private int roleId;
 
-    @Column(name = "create_time", nullable = false)
-    private Date createTime;
 }
 
-class UserRelationKey implements Serializable {
+class UserRoleKey implements Serializable {
 
-    private int initiatorId;
+    private int userId;
 
-    private int recipientId;
+    private int roleId;
 }
+

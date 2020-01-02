@@ -10,14 +10,44 @@ import java.util.List;
 
 public interface UserService {
 
+    /**
+     *
+     * @param queryBo
+     * @return
+     */
     List<UserInfoBo> queryUsersInfo(UserQueryBo queryBo);
 
+    /**
+     *
+     * @param createBo
+     * @return
+     */
     Integer createUser(UserCreateBo createBo);
 
+    /**
+     *
+     * @param userId
+     */
     void unableUser(Integer userId);
 
+    /**
+     *
+     * @param userId
+     * @param available
+     */
     void changeUserAvailableStatus(Integer userId, boolean available);
 
-    void changeUserPassword(UserChangePwBo changePwBo, Integer userId);
+    /**
+     *
+     * @param changePwBo
+     */
+    void changeUserPassword(UserChangePwBo changePwBo);
+
+    /**
+     *
+     * @param userId
+     * @param roleId
+     */
+    void changeUserRole(Integer userId, Integer roleId);
 
 }

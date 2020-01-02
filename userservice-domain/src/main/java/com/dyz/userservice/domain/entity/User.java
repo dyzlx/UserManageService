@@ -68,7 +68,4 @@ public class User {
     @Column(name = "available", nullable = false)
     @Type(type = "yes_no")
     private boolean available;
-
-    @Column(name = "role_id", nullable = false)
-    private int roleId;
 }
