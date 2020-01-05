@@ -68,4 +68,7 @@ public class User {
     @Column(name = "available", nullable = false)
     @Type(type = "yes_no")
     private boolean available;
+
+    @Column(name = "profile_photo_id")
+    private int profilePhotoId;
 }

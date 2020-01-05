@@ -3,7 +3,8 @@ package com.dyz.userservice.sal.service;
 
 import com.dyz.userservice.sal.bo.UserChangePwBo;
 import com.dyz.userservice.sal.bo.UserCreateBo;
-import com.dyz.userservice.sal.bo.UserInfoBo;
+import com.dyz.userservice.sal.bo.UserDetailInfoBo;
+import com.dyz.userservice.sal.bo.UserGeneralInfoBo;
 import com.dyz.userservice.sal.bo.UserQueryBo;
 
 import java.util.List;
@@ -15,7 +16,14 @@ public interface UserService {
      * @param queryBo
      * @return
      */
-    List<UserInfoBo> queryUsersInfo(UserQueryBo queryBo);
+    List<UserGeneralInfoBo> queryUsersGeneralInfo(UserQueryBo queryBo);
+
+    /**
+     *
+     * @param queryBo
+     * @return
+     */
+    List<UserDetailInfoBo> queryUsersDetailInfo(UserQueryBo queryBo);
 
     /**
      *
