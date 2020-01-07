@@ -16,12 +16,12 @@
     <dependencies>
         <dependency>
             <groupId>com.dyz.userservice</groupId>
-            <artifactId>userservice-domain</artifactId>
+            <artifactId>userservice-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.dyz.userservice</groupId>
-            <artifactId>userservice-common</artifactId>
+            <artifactId>userservice-domain</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>

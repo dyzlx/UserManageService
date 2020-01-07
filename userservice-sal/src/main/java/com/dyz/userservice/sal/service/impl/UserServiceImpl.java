@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class UserServiceImpl {
-
     @Autowired
     private UserRepository userRepository;
 }
