@@ -1,19 +1,19 @@
 package com.dyz.userservice.sal.service;
 
 
+import com.dyz.userservice.sal.bo.UserRelationInfoBo;
+
 public interface UserRelationService {
 
     /**
      *
-     * @param initiatorUserId
-     * @param recipientUserId
+     * @param relationInfoBo
      */
-    void makeFriends(Integer initiatorUserId, Integer recipientUserId);
+    void makeFriends(UserRelationInfoBo relationInfoBo);
 
     /**
      *
-     * @param initiatorUserId
-     * @param deletedFriendId
+     * @param relationInfoBo
      */
-    void deleteFriends(Integer initiatorUserId, Integer deletedFriendId);
+    void deleteFriends(UserRelationInfoBo relationInfoBo);
 }

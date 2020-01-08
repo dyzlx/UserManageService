@@ -3,10 +3,11 @@ package com.dyz.userservice.sal.service;
 
 import com.dyz.userservice.sal.bo.UserChangePwBo;
 import com.dyz.userservice.sal.bo.UserCreateBo;
-import com.dyz.userservice.sal.bo.UserDetailInfoBo;
-import com.dyz.userservice.sal.bo.UserGeneralInfoBo;
+import com.dyz.userservice.sal.bo.UserInfoBo;
 import com.dyz.userservice.sal.bo.UserQueryBo;
+import org.springframework.lang.Nullable;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public interface UserService {
@@ -16,21 +17,14 @@ public interface UserService {
      * @param queryBo
      * @return
      */
-    List<UserGeneralInfoBo> queryUsersGeneralInfo(UserQueryBo queryBo);
-
-    /**
-     *
-     * @param queryBo
-     * @return
-     */
-    List<UserDetailInfoBo> queryUsersDetailInfo(UserQueryBo queryBo);
+    List<UserInfoBo> queryUsersInfo(@NotNull UserQueryBo queryBo);
 
     /**
      *
      * @param createBo
      * @return
      */
-    Integer createUser(UserCreateBo createBo);
+    Integer createUser(@NotNull UserCreateBo createBo);
 
     /**
      *
@@ -49,7 +43,7 @@ public interface UserService {
      *
      * @param changePwBo
      */
-    void changeUserPassword(UserChangePwBo changePwBo);
+    void changeUserPassword(@NotNull UserChangePwBo changePwBo);
 
     /**
      *
