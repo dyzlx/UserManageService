@@ -17,14 +17,14 @@ public interface UserService {
      * @param queryBo
      * @return
      */
-    List<UserInfoBo> queryUsersInfo(@NotNull UserQueryBo queryBo);
+    List<UserInfoBo> queryUsersInfo(UserQueryBo queryBo);
 
     /**
      *
      * @param createBo
      * @return
      */
-    Integer createUser(@NotNull UserCreateBo createBo);
+    Integer createUser(UserCreateBo createBo);
 
     /**
      *
@@ -43,7 +43,7 @@ public interface UserService {
      *
      * @param changePwBo
      */
-    void changeUserPassword(@NotNull UserChangePwBo changePwBo);
+    void changeUserPassword(UserChangePwBo changePwBo);
 
     /**
      *

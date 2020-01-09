@@ -24,5 +24,10 @@
             <artifactId>userservice-domain</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.dyz.filxes</groupId>
+            <artifactId>filxeservice-client</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>

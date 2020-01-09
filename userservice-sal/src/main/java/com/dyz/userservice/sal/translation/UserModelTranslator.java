@@ -2,6 +2,7 @@ package com.dyz.userservice.sal.translation;
 
 
 import com.dyz.userservice.domain.entity.User;
+import com.dyz.userservice.sal.bo.UserCreateBo;
 import com.dyz.userservice.sal.bo.UserInfoBo;
 
 import java.util.ArrayList;
@@ -10,8 +11,8 @@ import java.util.Objects;
 
 public class UserModelTranslator {
 
-    public static UserInfoBo toBo(User entity){
-        if(Objects.isNull(entity)){
+    public static UserInfoBo toBo(User entity) {
+        if (Objects.isNull(entity)) {
             return null;
         }
         return UserInfoBo.builder()
@@ -28,8 +29,8 @@ public class UserModelTranslator {
                 .build();
     }
 
-    public static List<UserInfoBo> toBoList(List<User> entitys){
-        if(Objects.isNull(entitys)){
+    public static List<UserInfoBo> toBoList(List<User> entitys) {
+        if (Objects.isNull(entitys)) {
             return null;
         }
         List<UserInfoBo> results = new ArrayList<>();
@@ -37,5 +38,20 @@ public class UserModelTranslator {
             results.add(toBo(x));
         });
         return results;
+    }
+
+    public static User toEntity(UserCreateBo createBo) {
+        if (Objects.isNull(createBo)) {
+            return null;
+        }
+        User entity = User.builder()
+                .birthday(createBo.getBirthday())
+                .emailAddress(createBo.getEmailAddress())
+                .gender(createBo.getGender())
+                .nickName(createBo.getNickName())
+                .password(createBo.getPassword())
+                .phoneNumber(createBo.getPhoneNumber())
+                .build();
+        return entity;
     }
 }
