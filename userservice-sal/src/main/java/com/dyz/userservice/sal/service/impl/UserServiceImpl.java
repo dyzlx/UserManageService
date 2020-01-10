@@ -1,17 +1,13 @@
 package com.dyz.userservice.sal.service.impl;
 
-import com.dyz.userservice.common.exception.IllegalParamException;
-import com.dyz.userservice.common.exception.NoDataException;
-import com.dyz.userservice.domain.entity.User;
-import com.dyz.userservice.domain.repository.UserRepository;
-import com.dyz.userservice.sal.access.LogicFileAccess;
-import com.dyz.userservice.sal.bo.UserChangePwBo;
-import com.dyz.userservice.sal.bo.UserCreateBo;
-import com.dyz.userservice.sal.bo.UserInfoBo;
-import com.dyz.userservice.sal.bo.UserQueryBo;
-import com.dyz.userservice.sal.service.UserService;
-import com.dyz.userservice.sal.translation.UserModelTranslator;
-import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.io.IOUtils;
@@ -22,13 +18,23 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import javax.validation.constraints.NotNull;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import com.dyz.userservice.common.exception.IllegalParamException;
+import com.dyz.userservice.common.exception.NoDataException;
+import com.dyz.userservice.domain.entity.Role;
+import com.dyz.userservice.domain.entity.User;
+import com.dyz.userservice.domain.entity.UserRole;
+import com.dyz.userservice.domain.repository.RoleRepository;
+import com.dyz.userservice.domain.repository.UserRepository;
+import com.dyz.userservice.domain.repository.UserRoleRepository;
+import com.dyz.userservice.sal.access.LogicFileAccess;
+import com.dyz.userservice.sal.bo.UserChangePwBo;
+import com.dyz.userservice.sal.bo.UserCreateBo;
+import com.dyz.userservice.sal.bo.UserInfoBo;
+import com.dyz.userservice.sal.bo.UserQueryBo;
+import com.dyz.userservice.sal.service.UserService;
+import com.dyz.userservice.sal.translation.UserModelTranslator;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -36,6 +42,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private RoleRepository roleRepository;
+    
+    @Autowired
+    private UserRoleRepository userRoleRepository;
 
     @Autowired
     private LogicFileAccess logicFileAccess;
@@ -69,7 +81,7 @@ public class UserServiceImpl implements UserService {
         User newUser = UserModelTranslator.toEntity(createBo);
         newUser.setAvailable(true);
         newUser.setEnable(true);
-        newUser.setBirthday(new Date());
+        newUser.setRegisterTime(new Date());
         if (Objects.nonNull(createBo.getProfilePhoto())) {
             log.info("upload user profile photo");
             MultipartFile[] photo = transferMultipartFiles(createBo.getProfilePhoto());
@@ -86,6 +98,58 @@ public class UserServiceImpl implements UserService {
     @Override
     public void unableUser(Integer userId) {
         log.info("begin to unable user, userId = {}", userId);
+        User user = getUserByUserId(userId);
+        user.setEnable(false);
+        userRepository.save(user);
+        log.info("end of unable user");
+    }
+
+    @Override
+    public void changeUserAvailableStatus(Integer userId, boolean available) {
+        log.info("begin to change user available status, userId = {}", userId);
+        User user = getUserByUserId(userId);
+        user.setAvailable(false);
+        userRepository.save(user);
+        log.info("end of change");
+    }
+
+    @Override
+    public void changeUserPassword(UserChangePwBo changePwBo) {
+        log.info("begin to change user password, changeBo = {}", changePwBo);
+        if(ObjectUtils.allNotNull(changePwBo, changePwBo.getNewPassword(),
+                changePwBo.getOriginPassword(), changePwBo.getUserId())) {
+            log.error("param is null");
+            throw new IllegalParamException(0, "param is null");
+        }
+        User user = getUserByUserId(changePwBo.getUserId());
+        String oldPassword = user.getPassword();
+        if(!Objects.equals(oldPassword, changePwBo.getOriginPassword())) {
+            log.error("origin password is not current");
+            throw new IllegalParamException(0, "origin password is not current");
+        }
+        user.setPassword(changePwBo.getNewPassword());
+        userRepository.save(user);
+        log.info("end of change");
+    }
+
+    @Override
+    public void changeUserRole(Integer userId, List<Integer> roleIds) {
+        log.info("begin to change user role");
+        if(Objects.isNull(userId) || CollectionUtils.isEmpty(roleIds)) {
+            log.error("param is null");
+            throw new IllegalParamException(0, "param is null");
+        }
+        User user = getUserByUserId(userId);
+        log.info("delete user origin roles");
+        log.info("end of change");
+    }
+    
+    /**
+     * get user
+     * @param userId
+     * @return
+     */
+    private User getUserByUserId(Integer userId) {
         if(Objects.isNull(userId)) {
             log.error("param is null");
             throw new IllegalParamException(0, "param is null");
@@ -95,24 +159,25 @@ public class UserServiceImpl implements UserService {
             log.error("no such enable user");
             throw new NoDataException(0, "no such user");
         }
-        user.setEnable(false);
-        userRepository.save(user);
-        log.info("end of unable user");
+        return user;
     }
-
-    @Override
-    public void changeUserAvailableStatus(Integer userId, boolean available) {
-
-    }
-
-    @Override
-    public void changeUserPassword(UserChangePwBo changePwBo) {
-
-    }
-
-    @Override
-    public void changeUserRole(Integer userId, Integer roleId) {
-
+    
+    /**
+     * get role
+     * @param roleId
+     * @return
+     */
+    private Role getRoleByRoleId(Integer roleId) {
+        if(Objects.isNull(roleId)) {
+            log.error("param is null");
+            throw new IllegalParamException(0, "param is null");
+        }
+        Role role = roleRepository.queryById(roleId);
+        if(Objects.isNull(role)) {
+            log.error("no such enable user");
+            throw new NoDataException(0, "no such user");
+        }
+        return role;
     }
 
     /**
