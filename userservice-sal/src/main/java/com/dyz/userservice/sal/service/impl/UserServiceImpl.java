@@ -1,25 +1,5 @@
 package com.dyz.userservice.sal.service.impl;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.fileupload.disk.DiskFileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.ObjectUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
-
 import com.dyz.userservice.common.exception.IllegalParamException;
 import com.dyz.userservice.common.exception.NoDataException;
 import com.dyz.userservice.domain.entity.Role;
@@ -35,8 +15,25 @@ import com.dyz.userservice.sal.bo.UserInfoBo;
 import com.dyz.userservice.sal.bo.UserQueryBo;
 import com.dyz.userservice.sal.service.UserService;
 import com.dyz.userservice.sal.translation.UserModelTranslator;
-
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.fileupload.disk.DiskFileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -65,9 +62,7 @@ public class UserServiceImpl implements UserService {
                 userRepository.queryEnableUsers(
                         queryBo.getUserId(), queryBo.getEmailAddress(),
                         queryBo.getPhoneNumber(), queryBo.getNickName(),
-                        queryBo.getFromRegisterTime(), queryBo.getToRegisterTime()
-                )
-        );
+                        queryBo.getFromRegisterTime(), queryBo.getToRegisterTime()));
         log.info("end of query user info, result = {}", results);
         return results;
     }
@@ -75,7 +70,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Integer createUser(UserCreateBo createBo) {
         log.info("begin to create user, createBo = {}", createBo);
-        if (ObjectUtils.allNotNull(createBo, createBo.getPhoneNumber(), createBo.getEmailAddress(),
+        if (!ObjectUtils.allNotNull(createBo, createBo.getPhoneNumber(), createBo.getEmailAddress(),
                 createBo.getGender(), createBo.getNickName(), createBo.getBirthday(), createBo.getPassword())) {
             log.error("param is null");
             throw new IllegalParamException(0, "create param is null");
@@ -118,7 +113,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void changeUserPassword(UserChangePwBo changePwBo) {
         log.info("begin to change user password, changeBo = {}", changePwBo);
-        if(ObjectUtils.allNotNull(changePwBo, changePwBo.getNewPassword(),
+        if(!ObjectUtils.allNotNull(changePwBo, changePwBo.getNewPassword(),
                 changePwBo.getOriginPassword(), changePwBo.getUserId())) {
             log.error("param is null");
             throw new IllegalParamException(0, "param is null");
@@ -142,7 +137,7 @@ public class UserServiceImpl implements UserService {
             throw new IllegalParamException(0, "param is null");
         }
         User user = getUserByUserId(userId);
-        userRoleRepository.deleteUserRolesByUserId(userId);
+        userRoleRepository.deleteUserRolesByUserId(user.getId());
         List<UserRole> newUserRoles = new ArrayList<>();
         roleIds.forEach(x -> {
             Role role = getRoleByRoleId(x);
@@ -150,7 +145,7 @@ public class UserServiceImpl implements UserService {
                 log.error("no such role");
                 throw new NoDataException(0, "no such role");
             }
-            UserRole userRole = UserRole.builder().roleId(role.getId()).userId(userId).build();
+            UserRole userRole = UserRole.builder().roleId(role.getId()).userId(user.getId()).build();
             newUserRoles.add(userRole);
         });
         userRoleRepository.saveAll(newUserRoles);

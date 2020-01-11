@@ -19,4 +19,7 @@ public interface UserRelationRepository extends JpaRepository<UserRelation, Inte
 
     @Query(value = "select * from user_relation where initiator_id=?1 or recipient_id=?1", nativeQuery = true)
     List<UserRelation> queryUserRelationsByUserId(Integer userId);
+
+    UserRelation queryByInitiatorIdAndRecipientId(Integer initiatorId, Integer recipientId);
+
 }
