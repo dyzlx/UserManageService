@@ -3,9 +3,11 @@ package com.dyz.userservice.sal.service.impl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.fileupload.disk.DiskFileItem;
@@ -134,15 +136,27 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void changeUserRole(Integer userId, List<Integer> roleIds) {
-        log.info("begin to change user role");
+        log.info("begin to change user role, userId = {}, roleIds = {}", userId, roleIds);
         if(Objects.isNull(userId) || CollectionUtils.isEmpty(roleIds)) {
             log.error("param is null");
             throw new IllegalParamException(0, "param is null");
         }
         User user = getUserByUserId(userId);
-        log.info("delete user origin roles");
+        userRoleRepository.deleteUserRolesByUserId(userId);
+        List<UserRole> newUserRoles = new ArrayList<>();
+        roleIds.forEach(x -> {
+            Role role = getRoleByRoleId(x);
+            if(Objects.isNull(role)) {
+                log.error("no such role");
+                throw new NoDataException(0, "no such role");
+            }
+            UserRole userRole = UserRole.builder().roleId(role.getId()).userId(userId).build();
+            newUserRoles.add(userRole);
+        });
+        userRoleRepository.saveAll(newUserRoles);
         log.info("end of change");
     }
+
     
     /**
      * get user
@@ -150,10 +164,6 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     private User getUserByUserId(Integer userId) {
-        if(Objects.isNull(userId)) {
-            log.error("param is null");
-            throw new IllegalParamException(0, "param is null");
-        }
         User user = userRepository.getEnableUserById(userId);
         if(Objects.isNull(user)) {
             log.error("no such enable user");
@@ -168,10 +178,6 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     private Role getRoleByRoleId(Integer roleId) {
-        if(Objects.isNull(roleId)) {
-            log.error("param is null");
-            throw new IllegalParamException(0, "param is null");
-        }
         Role role = roleRepository.queryById(roleId);
         if(Objects.isNull(role)) {
             log.error("no such enable user");

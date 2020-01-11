@@ -10,4 +10,6 @@ import java.util.List;
 public interface UserRoleRepository extends JpaRepository<UserRole, Integer> {
 
     List<UserRole> queryUserRolesByUserId(Integer userId);
+
+    void deleteUserRolesByUserId(Integer userId);
 }
