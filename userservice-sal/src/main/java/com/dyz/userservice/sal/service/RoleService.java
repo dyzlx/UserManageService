@@ -10,7 +10,7 @@ public interface RoleService {
 
     List<RoleInfoBo> queryRoleInfos(RoleQueryBo queryInfoBo);
 
-    void createRole(RoleCreateBo createBo);
+    Integer createRole(RoleCreateBo createBo);
 
     void deleteRole(Integer roleId);
 }

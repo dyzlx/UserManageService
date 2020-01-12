@@ -48,7 +48,7 @@ public interface UserService {
     /**
      *
      * @param userId
-     * @param roleId
+     * @param roleIds
      */
     void changeUserRole(Integer userId, List<Integer> roleIds);
 

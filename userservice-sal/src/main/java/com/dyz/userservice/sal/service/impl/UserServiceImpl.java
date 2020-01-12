@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.save(newUser);
         log.info("end of create user");
-        return null;
+        return newUser.getId();
     }
 
     @Override
