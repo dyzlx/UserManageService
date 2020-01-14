@@ -15,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -30,6 +32,7 @@ public class UserRelationServiceImpl implements UserRelationService {
     private UserRepository userRepository;
 
     @Override
+    @Transactional(rollbackFor = {Exception.class}, propagation = Propagation.REQUIRED)
     public void makeFriends(UserRelationInfoBo relationInfoBo) {
         log.info("begin to make friend, bo = {}", relationInfoBo);
         if(!ObjectUtils.allNotNull(relationInfoBo, relationInfoBo.getInitiatorUserId(), relationInfoBo.getRecipientUserId())) {
@@ -47,6 +50,7 @@ public class UserRelationServiceImpl implements UserRelationService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class}, propagation = Propagation.REQUIRED)
     public void deleteFriends(UserRelationInfoBo relationInfoBo) {
         log.info("begin to delete friend, bo = {}", relationInfoBo);
         if(!ObjectUtils.allNotNull(relationInfoBo, relationInfoBo.getInitiatorUserId(), relationInfoBo.getRecipientUserId())) {

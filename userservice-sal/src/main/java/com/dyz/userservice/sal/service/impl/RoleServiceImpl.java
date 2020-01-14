@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -38,6 +40,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class}, propagation = Propagation.REQUIRED)
     public Integer createRole(RoleCreateBo createBo) {
         log.info("begin to create role, createBo = {}", createBo);
         if(!ObjectUtils.allNotNull(createBo, createBo.getName())) {
@@ -51,6 +54,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class}, propagation = Propagation.REQUIRED)
     public void deleteRole(Integer roleId) {
         log.info("begin to delete role, roleId = {}", roleId);
         if(Objects.isNull(roleId)) {

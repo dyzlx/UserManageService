@@ -24,6 +24,8 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
@@ -68,6 +70,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class}, propagation = Propagation.REQUIRED)
     public Integer createUser(UserCreateBo createBo) {
         log.info("begin to create user, createBo = {}", createBo);
         if (!ObjectUtils.allNotNull(createBo, createBo.getPhoneNumber(), createBo.getEmailAddress(),
@@ -93,6 +96,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class}, propagation = Propagation.REQUIRED)
     public void unableUser(Integer userId) {
         log.info("begin to unable user, userId = {}", userId);
         User user = getUserByUserId(userId);
@@ -102,6 +106,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class}, propagation = Propagation.REQUIRED)
     public void changeUserAvailableStatus(Integer userId, boolean available) {
         log.info("begin to change user available status, userId = {}", userId);
         User user = getUserByUserId(userId);
@@ -111,6 +116,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class}, propagation = Propagation.REQUIRED)
     public void changeUserPassword(UserChangePwBo changePwBo) {
         log.info("begin to change user password, changeBo = {}", changePwBo);
         if(!ObjectUtils.allNotNull(changePwBo, changePwBo.getNewPassword(),
@@ -130,6 +136,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class}, propagation = Propagation.REQUIRED)
     public void changeUserRole(Integer userId, List<Integer> roleIds) {
         log.info("begin to change user role, userId = {}, roleIds = {}", userId, roleIds);
         if(Objects.isNull(userId) || CollectionUtils.isEmpty(roleIds)) {
