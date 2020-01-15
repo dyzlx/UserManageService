@@ -1,5 +1,29 @@
 package com.dyz.userservice.sal.service.impl;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.fileupload.disk.DiskFileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+
 import com.dyz.userservice.common.exception.IllegalParamException;
 import com.dyz.userservice.common.exception.NoDataException;
 import com.dyz.userservice.domain.entity.Role;
@@ -14,28 +38,10 @@ import com.dyz.userservice.sal.bo.UserCreateBo;
 import com.dyz.userservice.sal.bo.UserInfoBo;
 import com.dyz.userservice.sal.bo.UserQueryBo;
 import com.dyz.userservice.sal.service.UserService;
+import com.dyz.userservice.sal.translation.RoleModelTranslator;
 import com.dyz.userservice.sal.translation.UserModelTranslator;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.fileupload.disk.DiskFileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.ObjectUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -60,11 +66,22 @@ public class UserServiceImpl implements UserService {
             log.error("param is null");
             throw new IllegalParamException(0, "query param is null");
         }
-        List<UserInfoBo> results = UserModelTranslator.toBoList(
-                userRepository.queryEnableUsers(
-                        queryBo.getUserId(), queryBo.getEmailAddress(),
-                        queryBo.getPhoneNumber(), queryBo.getNickName(),
-                        queryBo.getFromRegisterTime(), queryBo.getToRegisterTime()));
+        Map<Integer, Role> roleMap = roleRepository.findAll()
+                .stream()
+                .collect(Collectors.toMap(Role::getId, Function.identity()));
+        List<User> users = userRepository
+                .queryUsers(queryBo.getUserId(), queryBo.getEmailAddress(), queryBo.getPhoneNumber(), queryBo.getNickName(),
+                        queryBo.getFromRegisterTime(), queryBo.getToRegisterTime())
+                .stream()
+                .filter(user -> Objects.isNull(queryBo.getEnable()) ? true : Objects.equals(queryBo.getEnable(), user.isEnable()))
+                .filter(user -> Objects.isNull(queryBo.getAvailable()) ? true : Objects.equals(queryBo.getAvailable(), user.isAvailable()))
+                .collect(Collectors.toList());
+        List<UserInfoBo> results = UserModelTranslator.toBoList(users).stream().map(userBo -> {
+            List<Role> roles = userRoleRepository.queryUserRolesByUserId(userBo.getUserId()).stream()
+                    .map(userRole -> roleMap.get(userRole.getRoleId())).collect(Collectors.toList());
+            userBo.setRoles(RoleModelTranslator.toBoList(roles));
+            return userBo;
+        }).collect(Collectors.toList());
         log.info("end of query user info, result = {}", results);
         return results;
     }

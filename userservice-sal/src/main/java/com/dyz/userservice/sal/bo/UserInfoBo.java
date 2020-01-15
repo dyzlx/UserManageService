@@ -1,11 +1,11 @@
 package com.dyz.userservice.sal.bo;
 
+import java.util.Date;
+import java.util.List;
+
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.experimental.SuperBuilder;
-
-import java.util.Date;
 
 @Data
 @Builder
@@ -31,5 +31,7 @@ public class UserInfoBo {
     private boolean enable;
 
     private boolean available;
+    
+    private List<RoleInfoBo> roles;
 
 }
