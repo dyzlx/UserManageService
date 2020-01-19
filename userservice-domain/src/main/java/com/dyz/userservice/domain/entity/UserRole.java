@@ -38,6 +38,7 @@ public class UserRole {
 
 }
 
+@EqualsAndHashCode
 class UserRoleKey implements Serializable {
 
     private int userId;

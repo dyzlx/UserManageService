@@ -41,6 +41,7 @@ public class UserRelation {
     private Date createTime;
 }
 
+@EqualsAndHashCode
 class UserRelationKey implements Serializable {
 
     private int initiatorId;

@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 @EnableTransactionManagement
 @EnableDiscoveryClient
-@EnableFeignClients
+@EnableFeignClients(basePackages = {"com.dyz.filxeservice.client"})
 @ServletComponentScan
 public class UserServiceApplication {
 	public static void main(String[] args) {

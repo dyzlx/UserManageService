@@ -99,13 +99,7 @@ public class UserServiceImpl implements UserService {
         newUser.setAvailable(true);
         newUser.setEnable(true);
         newUser.setRegisterTime(new Date());
-        if (Objects.nonNull(createBo.getProfilePhoto())) {
-            log.info("upload user profile photo");
-            MultipartFile[] photo = transferMultipartFiles(createBo.getProfilePhoto());
-            Integer photoId = logicFileAccess.uploadFiles(photo).get(0);
-            newUser.setProfilePhotoId(photoId);
-            log.info("upload finish, photo id = {}", photoId);
-        }
+        // TODO generate a default photo when create a user
         userRepository.save(newUser);
         log.info("end of create user");
         return newUser.getId();

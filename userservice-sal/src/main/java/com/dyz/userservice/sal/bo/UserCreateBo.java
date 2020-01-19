@@ -2,12 +2,13 @@ package com.dyz.userservice.sal.bo;
 
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
+import lombok.ToString;
 
 import java.util.Date;
 
 @Data
 @Builder
+@ToString(exclude = {"password"})
 public class UserCreateBo {
 
     private String emailAddress;
@@ -21,6 +22,4 @@ public class UserCreateBo {
     private String password;
 
     private String gender;
-
-    private MultipartFile profilePhoto;
 }

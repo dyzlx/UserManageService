@@ -111,7 +111,6 @@ public class UserModelTranslator {
                     .nickName(createVo.getNickName())
                     .password(createVo.getPassword())
                     .phoneNumber(createVo.getPhoneNumber())
-                    .profilePhoto(createVo.getProfilePhoto())
                     .build();
         } catch (ParseException e) {
             throw new IllegalParamException(0, "illegal param");

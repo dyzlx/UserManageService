@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @WebFilter(filterName = "userContextParseFilter", urlPatterns = {"/userservice/*"})
@@ -35,7 +36,10 @@ public class UserContextParseInterceptor implements Filter {
             log.error("required header param is null");
             throw new IllegalParamException(0, "required header param is null");
         }
-        List<String> roles = new ArrayList<>(Arrays.asList(rolesStr.split(",")));
+        List<String> roles = null;
+        if(Objects.nonNull(rolesStr)) {
+            roles = new ArrayList<>(Arrays.asList(rolesStr.split(",")));
+        }
         Integer userId = Integer.parseInt(userIdStr);
         currentUserContext.setUserId(userId);
         currentUserContext.setUserRoles(roles);
