@@ -18,22 +18,20 @@ public class LogicFileAccess {
     /**
      * upload file
      * @param files
-     * @param userId
      * @return
      */
-    public List<Integer> uploadFiles(MultipartFile[] files, Integer userId) {
+    public List<Integer> uploadFiles(MultipartFile[] files) {
         log.info("trigger remote service to upload file");
-        List<Integer> pictureIds = logicFileClient.uploadFiles(files, userId).getContent();
+        List<Integer> pictureIds = logicFileClient.uploadFiles(files).getContent();
         return pictureIds;
     }
 
     /**
      * delete file
      * @param fileIds
-     * @param userId
      */
-    public void deleteLogicFiles(List<Integer> fileIds, Integer userId) {
+    public void deleteLogicFiles(List<Integer> fileIds) {
         log.info("trigger remote service to delete files");
-        logicFileClient.deleteLogicFiles(fileIds, userId);
+        logicFileClient.deleteLogicFiles(fileIds);
     }
 }

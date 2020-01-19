@@ -102,8 +102,7 @@ public class UserServiceImpl implements UserService {
         if (Objects.nonNull(createBo.getProfilePhoto())) {
             log.info("upload user profile photo");
             MultipartFile[] photo = transferMultipartFiles(createBo.getProfilePhoto());
-            // TODO userId
-            Integer photoId = logicFileAccess.uploadFiles(photo, null).get(0);
+            Integer photoId = logicFileAccess.uploadFiles(photo).get(0);
             newUser.setProfilePhotoId(photoId);
             log.info("upload finish, photo id = {}", photoId);
         }
