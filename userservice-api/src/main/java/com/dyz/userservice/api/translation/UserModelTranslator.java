@@ -78,6 +78,7 @@ public class UserModelTranslator {
                 .emailAddress(infoBo.getEmailAddress())
                 .phoneNumber(infoBo.getPhoneNumber())
                 .registerTime(DateHandler.getDateString(infoBo.getRegisterTime()))
+                .roles(RoleModelTranslator.toVoLsit(infoBo.getRoles()))
                 .build();
     }
 

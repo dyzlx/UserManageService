@@ -76,11 +76,10 @@ public class UserServiceImpl implements UserService {
                 .filter(user -> (Objects.isNull(queryBo.getEnable()) || Objects.equals(queryBo.getEnable(), user.isEnable())))
                 .filter(user -> (Objects.isNull(queryBo.getAvailable()) || Objects.equals(queryBo.getAvailable(), user.isAvailable())))
                 .collect(Collectors.toList());
-        List<UserInfoBo> results = UserModelTranslator.toBoList(users).stream().map(userBo -> {
+        List<UserInfoBo> results = UserModelTranslator.toBoList(users).stream().peek(userBo -> {
             List<Role> roles = userRoleRepository.queryUserRolesByUserId(userBo.getUserId()).stream()
                     .map(userRole -> roleMap.get(userRole.getRoleId())).collect(Collectors.toList());
             userBo.setRoles(RoleModelTranslator.toBoList(roles));
-            return userBo;
         }).collect(Collectors.toList());
         log.info("end of query user info, result = {}", results);
         return results;

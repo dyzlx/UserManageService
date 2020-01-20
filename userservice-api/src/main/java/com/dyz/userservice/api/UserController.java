@@ -55,7 +55,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(Result.builder().content(userId).build());
     }
 
-    @RequestMapping(value = "changePassword", method = RequestMethod.PUT,
+    @RequestMapping(value = "password", method = RequestMethod.PUT,
             produces = {"application/json","application/xml"},
             consumes = {"application/json","application/xml"})
     public ResponseEntity<Result> changePassword(@Validated @RequestBody UserChangePwVo changePwVo) {
@@ -63,5 +63,25 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(Result.builder().build());
     }
 
+    @RequestMapping(value = "{userId}", method = RequestMethod.DELETE,
+            produces = {"application/json", "application/xml"})
+    public ResponseEntity<Result> unableUser(@PathVariable Integer userId) {
+        userService.unableUser(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(Result.builder().build());
+    }
 
+    @RequestMapping(value = "{userId}/status/{available}", method = RequestMethod.PUT,
+            produces = {"application/json", "application/xml"})
+    public ResponseEntity<Result> changeUserStatus(@PathVariable Integer userId, @PathVariable Boolean available) {
+        userService.changeUserAvailableStatus(userId, available);
+        return ResponseEntity.status(HttpStatus.OK).body(Result.builder().build());
+    }
+
+    @RequestMapping(value = "roles", method = RequestMethod.PUT,
+            produces = {"application/json","application/xml"},
+            consumes = {"application/json","application/xml"})
+    public ResponseEntity<Result> changeUserRole(@Validated @RequestBody UserChangeRoleVo changeRoleVo) {
+        userService.changeUserRole(changeRoleVo.getUserId(), changeRoleVo.getRoleIds());
+        return ResponseEntity.status(HttpStatus.OK).body(Result.builder().build());
+    }
 }
