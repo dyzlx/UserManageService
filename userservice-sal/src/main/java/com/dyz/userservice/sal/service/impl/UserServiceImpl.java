@@ -3,15 +3,12 @@ package com.dyz.userservice.sal.service.impl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.io.IOUtils;
@@ -76,7 +73,11 @@ public class UserServiceImpl implements UserService {
                 .filter(user -> (Objects.isNull(queryBo.getEnable()) || Objects.equals(queryBo.getEnable(), user.isEnable())))
                 .filter(user -> (Objects.isNull(queryBo.getAvailable()) || Objects.equals(queryBo.getAvailable(), user.isAvailable())))
                 .collect(Collectors.toList());
-        List<UserInfoBo> results = UserModelTranslator.toBoList(users).stream().peek(userBo -> {
+        List<UserInfoBo> boList = UserModelTranslator.toBoList(users);
+        if (CollectionUtils.isEmpty(boList)) {
+            return Collections.emptyList();
+        }
+        List<UserInfoBo> results = boList.stream().peek(userBo -> {
             List<Role> roles = userRoleRepository.queryUserRolesByUserId(userBo.getUserId()).stream()
                     .map(userRole -> roleMap.get(userRole.getRoleId())).collect(Collectors.toList());
             userBo.setRoles(RoleModelTranslator.toBoList(roles));

@@ -1,6 +1,5 @@
 package com.dyz.userservice.api.model;
 
-import com.dyz.userservice.sal.bo.RoleInfoBo;
 import lombok.Builder;
 import lombok.Data;
 
