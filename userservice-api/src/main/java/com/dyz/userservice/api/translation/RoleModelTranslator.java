@@ -1,7 +1,10 @@
 package com.dyz.userservice.api.translation;
 
+import com.dyz.userservice.api.model.RoleCreateVo;
 import com.dyz.userservice.api.model.RoleInfoVo;
+import com.dyz.userservice.sal.bo.RoleCreateBo;
 import com.dyz.userservice.sal.bo.RoleInfoBo;
+import com.dyz.userservice.sal.bo.RoleQueryBo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,5 +29,16 @@ public class RoleModelTranslator {
         List<RoleInfoVo> results = new ArrayList<>();
         infoBos.forEach(x -> results.add(toVo(x)));
         return results;
+    }
+
+    public static RoleQueryBo toBo(Integer rodeId, String name) {
+        return RoleQueryBo.builder().roleId(rodeId).name(name).build();
+    }
+
+    public static RoleCreateBo toBo(RoleCreateVo createVo) {
+        if(Objects.isNull(createVo)) {
+            return null;
+        }
+        return RoleCreateBo.builder().name(createVo.getName()).build();
     }
 }
