@@ -1,7 +1,7 @@
 server:
   port: 8884
   servlet:
-    context-path: /userservice
+    context-path: /
 logging:
   config: classpath:log4j2.xml
 spring:
