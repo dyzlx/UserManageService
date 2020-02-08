@@ -99,7 +99,7 @@ public class UserServiceImpl implements UserService {
         newUser.setAvailable(true);
         newUser.setEnable(true);
         newUser.setRegisterTime(new Date());
-        // TODO generate a default photo when create a user
+        newUser.setProfilePhotoId(-1);
         userRepository.save(newUser);
         log.info("end of create user");
         return newUser.getId();
