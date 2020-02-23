@@ -1,0 +1,10 @@
+============[image build]===========
+docker build --rm -t userservice_image .
+============[image run]===========
+docker run -d --name="userservice"\
+ -p 18884:8884\
+ -e DMS_DB_HOST=192.168.199.139\
+ -e DMS_DB_USERNAME=root\
+ -e DMS_DB_PASSWORD=658080\
+ -e DMS_DISCOVER_HOST=172.17.0.2\
+ userservice_image
