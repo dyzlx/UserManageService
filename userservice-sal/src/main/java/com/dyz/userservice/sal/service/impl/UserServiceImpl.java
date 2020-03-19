@@ -78,8 +78,10 @@ public class UserServiceImpl implements UserService {
             return Collections.emptyList();
         }
         List<UserInfoBo> results = boList.stream().peek(userBo -> {
-            List<Role> roles = userRoleRepository.queryUserRolesByUserId(userBo.getUserId()).stream()
-                    .map(userRole -> roleMap.get(userRole.getRoleId())).collect(Collectors.toList());
+            List<Role> roles = userRoleRepository.queryUserRolesByUserId(userBo.getUserId())
+                    .stream()
+                    .map(userRole -> roleMap.get(userRole.getRoleId()))
+                    .collect(Collectors.toList());
             userBo.setRoles(RoleModelTranslator.toBoList(roles));
         }).collect(Collectors.toList());
         log.info("end of query user info, result = {}", results);
