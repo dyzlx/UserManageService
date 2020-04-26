@@ -2,9 +2,25 @@ server:
   port: 8884
   servlet:
     context-path: /
+management:
+  server:
+    address: 127.0.0.1
+  endpoint:
+    health:
+      show-details: always
+    shutdown:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*'
 logging:
   file: /Volumes/DYZ-document/Program/X-CodeRunSpace/log/userservice/user-service.log
+  level:
+    com.netflix.discovery: error
 spring:
+  profiles:
+    include: discover-eureka
   application:
     name: userservice
   datasource:
@@ -24,12 +40,3 @@ spring:
     multipart:
       max-file-size: 500MB
       max-request-size: 500MB
-eureka:
-  instance:
-    # 使用服务的IP而不是服务器名称，确保在容器环境下正常
-    prefer-ip-address: true
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    serviceUrl:
-      defaultZone: http://${DMS_DISCOVER_HOST:127.0.0.1}:8761/eureka/
