@@ -15,12 +15,9 @@ management:
       exposure:
         include: '*'
 logging:
-  file: /Volumes/DYZ-document/Program/X-CodeRunSpace/log/userservice/user-service.log
   level:
     com.netflix.discovery: error
 spring:
-  application:
-    name: userservice
   cloud:
     loadbalancer:
       ribbon:
@@ -29,7 +26,7 @@ spring:
       host: ${DMS_DISCOVER_HOST:127.0.0.1}
       port: 8500
       discovery:
-        instance-id: ${spring.application.name}-${server.port}-${random.uuid}
+        instance-id: ${spring.application.name}-${server.port}
         prefer-ip-address: true
         enabled: true
         register: true
@@ -52,11 +49,10 @@ spring:
       max-file-size: 500MB
       max-request-size: 500MB
 
-filxeservice:
-  ribbon:
-    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule
-    ConnectTimeout: 500 #请求连接超时时间
-    ReadTimeout: 1000 #请求处理的超时时间
-    OkToRetryOnAllOperations: false #对所有请求都进行重试
-    MaxAutoRetriesNextServer: 2 #切换实例的重试次数
-    MaxAutoRetries: 1 #对当前实例的重试次数
+ribbon:
+  NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule
+  ConnectTimeout: 5000
+  ReadTimeout: 5000
+  OkToRetryOnAllOperations: false
+  MaxAutoRetriesNextServer: 2
+  MaxAutoRetries: 1
