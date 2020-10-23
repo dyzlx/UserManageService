@@ -6,6 +6,7 @@ import com.dyz.userservice.sal.bo.UserCreateBo;
 import com.dyz.userservice.sal.bo.UserInfoBo;
 import com.dyz.userservice.sal.bo.UserQueryBo;
 import org.springframework.lang.Nullable;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -51,5 +52,11 @@ public interface UserService {
      * @param roleIds
      */
     void changeUserRole(Integer userId, List<Integer> roleIds);
+
+    /**
+     *
+     * @return
+     */
+    Integer updateUserProfile(Integer userId, MultipartFile file);
 
 }

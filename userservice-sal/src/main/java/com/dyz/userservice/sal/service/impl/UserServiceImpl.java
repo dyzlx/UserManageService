@@ -1,26 +1,6 @@
 package com.dyz.userservice.sal.service.impl;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.ListUtils;
-import org.apache.commons.fileupload.disk.DiskFileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.ObjectUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
-
+import com.dyz.userservice.common.exception.BusinessException;
 import com.dyz.userservice.common.exception.IllegalParamException;
 import com.dyz.userservice.common.exception.NoDataException;
 import com.dyz.userservice.domain.entity.Role;
@@ -37,8 +17,31 @@ import com.dyz.userservice.sal.bo.UserQueryBo;
 import com.dyz.userservice.sal.service.UserService;
 import com.dyz.userservice.sal.translation.RoleModelTranslator;
 import com.dyz.userservice.sal.translation.UserModelTranslator;
-
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.fileupload.disk.DiskFileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -98,10 +101,14 @@ public class UserServiceImpl implements UserService {
             throw new IllegalParamException(0, "create param is null");
         }
         User newUser = UserModelTranslator.toEntity(createBo);
+        if(Objects.isNull(newUser)) {
+            log.error("user create bo is null");
+            throw new BusinessException("user create bo is null");
+        }
         newUser.setAvailable(true);
         newUser.setEnable(true);
         newUser.setRegisterTime(new Date());
-        newUser.setProfilePhotoId(-1);
+        newUser.setProfilePhotoId(-1); // let user update its profile after register
         userRepository.save(newUser);
         log.info("end of create user");
         return newUser.getId();
@@ -171,7 +178,12 @@ public class UserServiceImpl implements UserService {
         log.info("end of change");
     }
 
-    
+    @Override
+    public Integer updateUserProfile(Integer userId, MultipartFile file) {
+        return null;
+    }
+
+
     /**
      * get user
      * @param userId
