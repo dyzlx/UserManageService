@@ -60,7 +60,7 @@ public class UserRepositoryTest {
     public void queryUsersTest() throws ParseException {
         Date fromDate = DateUtils.parseDate("1996-03-13", ServiceConstant.DATE_FORMAT_SHORT);
         Date toDate = DateUtils.parseDate("9999-03-13", ServiceConstant.DATE_FORMAT_SHORT);
-        List<User> users = userRepository.queryUsers(null,null,null,null,fromDate,toDate);
+        List<User> users = userRepository.queryUsers(null,null,null,null,fromDate,toDate, null, null);
         System.out.println(users);
     }
 

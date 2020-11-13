@@ -24,6 +24,7 @@ spring:
       ribbon:
         enabled: true
     consul:
+      enabled: true
       host: ${DMS_DISCOVER_HOST:127.0.0.1}
       port: 8500
       discovery:

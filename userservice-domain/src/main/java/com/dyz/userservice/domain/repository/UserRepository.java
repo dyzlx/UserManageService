@@ -16,9 +16,11 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             + " and if(?2 is NULL,1=1,email_address=?2)"
             + " and if(?3 is NULL,1=1,phone_number=?3)"
             + " and if(?4 is NULL,1=1,nick_name like %?4%)"
-            + " and register_time between ?5 and ?6", nativeQuery = true)
+            + " and register_time between ?5 and ?6"
+            + " and if(?7 is NULL,enable='Y',enable=?7)"
+            + " and if(?8 is NULL,1=1,available=?8)", nativeQuery = true)
     List<User> queryUsers(Integer id, String emailAddress, String phoneNumber, String nickName,
-                                Date fromRegisterTime, Date toRegisterTime);
+                          Date fromRegisterTime, Date toRegisterTime, String enable, String available);
 
     @Query(value = "select * from user where id=?1 and enable='Y'", nativeQuery = true)
     User getEnableUserById(Integer id);

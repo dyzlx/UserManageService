@@ -68,8 +68,8 @@ public class UserRelationServiceImpl implements UserRelationService {
         List<UserRelation> userRelations = userRelationRepository.queryUserRelationsByUserId(user.getId());
         List<UserInfoBo> results = UserModelTranslator.toBoList(
                 userRelations.stream().map(x -> {
-                    User aUser = userRepository.getUserById(x.getInitiatorId());
-                    User bUser = userRepository.getUserById(x.getRecipientId());
+                    User aUser = userRepository.getEnableUserById(x.getInitiatorId());
+                    User bUser = userRepository.getEnableUserById(x.getRecipientId());
                     return Objects.equals(aUser, user) ? bUser : aUser;
                 }).collect(Collectors.toList())
         );

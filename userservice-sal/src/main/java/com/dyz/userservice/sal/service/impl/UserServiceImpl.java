@@ -3,6 +3,7 @@ package com.dyz.userservice.sal.service.impl;
 import com.dyz.userservice.common.exception.BusinessException;
 import com.dyz.userservice.common.exception.IllegalParamException;
 import com.dyz.userservice.common.exception.NoDataException;
+import com.dyz.userservice.common.util.BooleanHandler;
 import com.dyz.userservice.domain.entity.Role;
 import com.dyz.userservice.domain.entity.User;
 import com.dyz.userservice.domain.entity.UserRole;
@@ -71,11 +72,8 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toMap(Role::getId, Function.identity()));
         List<User> users = userRepository
                 .queryUsers(queryBo.getUserId(), queryBo.getEmailAddress(), queryBo.getPhoneNumber(), queryBo.getNickName(),
-                        queryBo.getFromRegisterTime(), queryBo.getToRegisterTime())
-                .stream()
-                .filter(user -> (Objects.isNull(queryBo.getEnable()) || Objects.equals(queryBo.getEnable(), user.isEnable())))
-                .filter(user -> (Objects.isNull(queryBo.getAvailable()) || Objects.equals(queryBo.getAvailable(), user.isAvailable())))
-                .collect(Collectors.toList());
+                        queryBo.getFromRegisterTime(), queryBo.getToRegisterTime(),
+                        BooleanHandler.convertToString(queryBo.getEnable()), BooleanHandler.convertToString(queryBo.getAvailable()));
         List<UserInfoBo> boList = UserModelTranslator.toBoList(users);
         if (CollectionUtils.isEmpty(boList)) {
             return Collections.emptyList();

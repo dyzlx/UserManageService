@@ -30,17 +30,17 @@ public class UserContextParseInterceptor implements Filter {
         String rolesStr = httpServletRequest.getHeader(UserContext.USER_ROLES);
         String correlationId = httpServletRequest.getHeader(UserContext.CORRELATION_ID);
         String authToken = httpServletRequest.getHeader(UserContext.AUTH_TOKEN);
-        // userId and correlationId is required
-        if (!ObjectUtils.allNotNull(userIdStr, correlationId)) {
-            log.error("required headers userId and correlationId param is null");
-            throw new IllegalParamException(0, "required header param is null");
-        }
+//        // userId and correlationId is required
+//        if (!ObjectUtils.allNotNull(userIdStr, correlationId)) {
+//            log.error("required headers userId and correlationId param is null");
+//            throw new IllegalParamException(0, "required header param is null");
+//        }
         List<String> roles = null;
         if(Objects.nonNull(rolesStr)) {
             roles = Arrays.asList(rolesStr.split(","));
         }
-        Integer userId = Integer.parseInt(userIdStr);
-        currentUserContext.setUserId(userId);
+        //Integer userId = Integer.parseInt(userIdStr);
+        //currentUserContext.setUserId(userId);
         currentUserContext.setUserRoles(roles);
         currentUserContext.setCorrelationId(correlationId);
         currentUserContext.setAuthToken(authToken);

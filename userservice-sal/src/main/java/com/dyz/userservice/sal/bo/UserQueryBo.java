@@ -25,7 +25,7 @@ public class UserQueryBo {
     private Date fromRegisterTime;
 
     private Date toRegisterTime;
-    
+
     /**
      * must Boolean, can not be boolean
      */
